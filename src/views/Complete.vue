@@ -1,0 +1,214 @@
+<template>
+  <div>
+    <div class="header">
+      <div class="logo">
+        <img src="@/assets/images/confetti.png" />
+      </div>
+    </div>
+    <div class="subheader">
+      <h4>
+        That’s it, you just made socializing easier.
+      </h4>
+    </div>
+    <div class="content">
+      <p>
+        Send the link below to friends and family to compare answers and make
+        your reunion safe and comfortable for everyone.
+      </p>
+      <p>
+        We want socializing to be as easy as possible, so save this link. It is
+        your comparison page, and it will update as friends and family members
+        answer the questions.
+      </p>
+
+      <router-link :to="{ name: 'summary', params: { id: $parent.bundle.id } }"
+        >View Results</router-link
+      >
+    </div>
+
+    <div class="actions">
+      <primary-button @click="shareSurvey" label="Share to compare" />
+      <div class="copy-link">
+        <a href="#" @click="toggleCopyLinkModal">Copy Link</a>
+      </div>
+    </div>
+
+    <modal
+      class="copy-link-modal"
+      v-if="showCopyLinkModal"
+      @close="toggleCopyLinkModal"
+    >
+      <div slot="body">
+        <h4>Copy the URL</h4>
+        <p>
+          Send this link to friends and family to invite them to share answers
+          so that everyone is comfortable.
+        </p>
+        <div class="link">
+          <input type="text" :value="bundleLink" ref="bundleLink" />
+          <div class="copy" @click="copyUrl">
+            <p>Copy</p>
+          </div>
+        </div>
+        <div class="copied" v-if="copied">
+          <img src="@/assets/images/thumbup.png" />
+          <p>link copied!</p>
+        </div>
+      </div>
+    </modal>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      showCopyLinkModal: false,
+      copied: false
+    };
+  },
+  computed: {
+    bundleLink() {
+      return `${location.origin}/${this.$parent.bundle.id}/`;
+    }
+  },
+  methods: {
+    shareSurvey() {
+      if (navigator.share) {
+        navigator.share({
+          title: "How Distant?",
+          url: this.bundleLink
+        });
+      }
+    },
+    toggleCopyLinkModal() {
+      this.showCopyLinkModal = !this.showCopyLinkModal;
+    },
+    copyUrl() {
+      let textToCopy = this.$refs.bundleLink;
+      textToCopy.select();
+      document.execCommand("copy");
+      this.copied = true;
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+.logo {
+  img {
+    margin: auto;
+    display: block;
+  }
+}
+.subheader {
+  h4 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 30px;
+
+    color: #27272e;
+  }
+}
+.content {
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+
+    color: #000000;
+    padding: 5px;
+  }
+  a {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 23px;
+    /* identical to box height */
+    text-decoration-line: underline;
+    color: #2671d9;
+  }
+}
+.actions {
+  margin-top: 50px;
+  .copy-link {
+    margin-top: 30px;
+    text-align: center;
+
+    a {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 23px;
+      /* identical to box height */
+      text-decoration-line: underline;
+      color: #2671d9;
+    }
+  }
+}
+.copy-link-modal {
+  h4 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 30px;
+
+    color: #27272e;
+  }
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .link {
+    display: flex;
+    flex-direction: row;
+    input {
+      border: none;
+      border-radius: 8px 0px 0px 8px;
+      height: 50px;
+      width: 250px;
+      box-sizing: border-box;
+      background: url("../assets/images/link.svg") no-repeat scroll 10px 15px;
+      padding-left: 40px;
+      background-color: #f0f2f5;
+    }
+    .copy {
+      width: 60px;
+      height: 50px;
+      background: #2671d9;
+      border-radius: 0px 8px 8px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 18px;
+        /* identical to box height */
+
+        color: #ffffff;
+      }
+    }
+  }
+  .copied {
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    p {
+      color: #2671d9;
+      margin: 0px 5px;
+    }
+  }
+}
+</style>
