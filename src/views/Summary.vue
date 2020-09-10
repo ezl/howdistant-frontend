@@ -27,12 +27,14 @@
         <div class="options">
           <div
             class="option"
-            v-for="(option, optIdx) in question.options.filter(
-              o =>
-                o.comfortable &&
-                o.comfortable.length > 0 &&
-                o.comfortable.length === surveyCount
-            )"
+            v-for="(option, optIdx) in question.options
+              .filter(
+                o =>
+                  o.comfortable &&
+                  o.comfortable.length > 0 &&
+                  o.comfortable.length === surveyCount
+              )
+              .reverse()"
             :key="`unanimous-${optIdx}`"
           >
             <div class="img_block">
@@ -45,12 +47,14 @@
 
           <div
             class="option"
-            v-for="(option, optIdx) in question.options.filter(
-              o =>
-                o.comfortable &&
-                o.comfortable.length > 0 &&
-                o.comfortable.length < surveyCount
-            )"
+            v-for="(option, optIdx) in question.options
+              .filter(
+                o =>
+                  o.comfortable &&
+                  o.comfortable.length > 0 &&
+                  o.comfortable.length < surveyCount
+              )
+              .reverse()"
             :key="`warning-${optIdx}`"
           >
             <div
@@ -66,9 +70,9 @@
 
           <div
             class="option"
-            v-for="(option, optIdx) in question.options.filter(
-              o => !o.comfortable || !o.comfortable.length
-            )"
+            v-for="(option, optIdx) in question.options
+              .filter(o => !o.comfortable || !o.comfortable.length)
+              .reverse()"
             :key="`uncomfortable-${optIdx}`"
           >
             <div class="img_block">

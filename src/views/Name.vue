@@ -17,10 +17,19 @@
         We will display this name when we compare your answers to the answers of
         your family and friends.
       </p>
-      <input type="text" placeholder="Your Name" v-model="$parent.name" />
+      <input
+        type="text"
+        placeholder="Your Name"
+        v-model="$parent.name"
+        @keyup.enter="goToQuestions"
+      />
     </div>
     <div class="actions">
-      <primary-button @click="goToQuestions" label="Continue" />
+      <primary-button
+        @click="goToQuestions"
+        label="Continue"
+        :disabled="!$parent.name"
+      />
     </div>
   </div>
 </template>
@@ -28,7 +37,7 @@
 export default {
   methods: {
     goToQuestions() {
-      this.$router.push({ name: "questions" });
+      this.$router.push({ name: "questions", hash: "#1" });
     }
   }
 };
@@ -59,6 +68,8 @@ export default {
       height: 50px;
       border: none;
       padding-left: 15px;
+      font-size: 16px;
+      line-height: 23px;
     }
   }
   .name-tag {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="complete">
     <div class="header">
       <div class="logo">
         <img src="@/assets/images/confetti.png" />
@@ -27,8 +27,11 @@
     </div>
 
     <div class="actions">
-      <primary-button @click="shareSurvey" label="Share to compare" />
-      <div class="copy-link">
+      <primary-button
+        @click="shareSurvey"
+        :label="hasShare ? 'Share to compare' : 'Copy link to share'"
+      />
+      <div class="copy-link" v-show="hasShare">
         <a href="#" @click="toggleCopyLinkModal">Copy Link</a>
       </div>
     </div>
@@ -69,15 +72,23 @@ export default {
   computed: {
     bundleLink() {
       return `${location.origin}/${this.$parent.bundle.id}/`;
+    },
+    hasShare() {
+      if (navigator && navigator.share) {
+        return true;
+      }
+      return false;
     }
   },
   methods: {
     shareSurvey() {
-      if (navigator.share) {
+      if (this.hasShare) {
         navigator.share({
           title: "How Distant?",
           url: this.bundleLink
         });
+      } else {
+        this.toggleCopyLinkModal();
       }
     },
     toggleCopyLinkModal() {
@@ -93,6 +104,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.complete {
+  margin-bottom: 40px;
+}
 .logo {
   img {
     margin: auto;

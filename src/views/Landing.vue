@@ -15,7 +15,7 @@
       </div>
       <div class="subheader">
         <h4>
-          You'll miss them, they miss you.
+          You miss them, they miss you.
         </h4>
       </div>
       <div class="title">
@@ -57,7 +57,7 @@ export default {
 .landing {
   background: url("../assets/images/landing_background.png") no-repeat;
   height: 100vh;
-  padding: 10px 40px;
+  padding: 10px 35px;
   max-width: 500px;
   margin: auto;
 }
@@ -74,7 +74,7 @@ export default {
         font-style: normal;
         font-weight: bold;
         font-size: 24px;
-        line-height: 30px;
+        line-height: 24px;
         color: #2671d9;
         margin: 0px;
         margin-left: 10px;

@@ -16,7 +16,9 @@
       </div>
     </template>
     <div class="label">
-      <p>{{ currentLabel }}</p>
+      <p :class="{ questions: $route.name === 'questions' }">
+        {{ currentLabel }}
+      </p>
     </div>
     <template v-if="showGroupButton">
       <div class="group" @click="toggleGroupModal">
@@ -140,6 +142,14 @@ export default {
 
       color: #27272e;
       text-align: center;
+      position: absolute;
+
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      margin: 0px;
+    }
+    p.questions {
+      font-size: 16px;
     }
   }
   .group {

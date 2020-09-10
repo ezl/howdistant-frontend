@@ -1,5 +1,7 @@
 <template>
-  <button @click="$emit('click')">{{ label }}</button>
+  <button :class="{ disabled: disabled }" @click="$emit('click')">
+    {{ label }}
+  </button>
 </template>
 <script>
 export default {
@@ -35,5 +37,9 @@ button {
 
   text-align: center;
   color: #ffffff;
+}
+.disabled {
+  background: rgba(38, 113, 217, 0.6);
+  pointer-events: none;
 }
 </style>

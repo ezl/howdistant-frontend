@@ -92,7 +92,12 @@ export default {
     }
   },
   mounted() {
-    this.currentIndex = parseInt(this.$route.hash.replace("#", "")) || 0;
+    if (!this.$route.hash.replace("#", "")) {
+      this.currentIndex = 0;
+    } else {
+      this.currentIndex = parseInt(this.$route.hash.replace("#", "")) - 1;
+    }
+
     this.currentQuestion = this.$parent.questions[this.currentIndex];
     this.currentAnswer = this.currentQuestion.answer;
   },
@@ -121,7 +126,7 @@ export default {
       } else {
         this.$router.push({
           name: "questions",
-          hash: `#${this.currentIndex + 1}`
+          hash: `#${this.currentIndex + 2}`
         });
       }
     }
@@ -153,9 +158,15 @@ export default {
     background: rgba(38, 113, 217, 0.6);
   }
 }
+.question {
+  h4 {
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: #505055;
+  }
+}
 .options {
-  margin-top: 50px;
-
   .option {
     height: 65px;
     padding: 5px 0px;
@@ -182,22 +193,17 @@ export default {
   }
   .option:nth-child(2) {
     background-color: rgba(0, 0, 0, 0.02);
-    mix-blend-mode: screen;
   }
   .option:nth-child(3) {
     background-color: rgba(0, 0, 0, 0.05);
-    mix-blend-mode: screen;
   }
   .option:nth-child(4) {
-    mix-blend-mode: screen;
     background-color: rgba(0, 0, 0, 0.08);
   }
   .option:nth-child(5) {
-    mix-blend-mode: screen;
     background-color: rgba(0, 0, 0, 0.1);
   }
   .option:nth-child(6) {
-    mix-blend-mode: screen;
     background-color: rgba(0, 0, 0, 0.12);
   }
   .option.active {
