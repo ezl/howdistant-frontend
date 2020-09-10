@@ -7,8 +7,10 @@
           <img src="@/assets/images/logo.png" />
         </div>
         <div class="header-label">
+          <h2 style="margin-bottom: 2px;">
+            How
+          </h2>
           <h2>
-            How <br />
             Distant?
           </h2>
         </div>
