@@ -8,6 +8,13 @@
         </div>
       </div>
       <div class="label">
+        <input
+          type="text"
+          v-model="$parent.name"
+          @keyup.enter="goToQuestions"
+          autofocus
+          ref="nameInput"
+        />
         <!--<p>{{ $parent.name }}</p> -->
       </div>
       <div class="bottom"></div>
@@ -17,12 +24,6 @@
         We will display this name when we compare your answers to the answers of
         your family and friends.
       </p>
-      <input
-        type="text"
-        placeholder="Your Name"
-        v-model="$parent.name"
-        @keyup.enter="goToQuestions"
-      />
     </div>
     <div class="actions">
       <primary-button
@@ -39,6 +40,9 @@ export default {
     goToQuestions() {
       this.$router.push({ name: "questions", hash: "#1" });
     }
+  },
+  mounted() {
+    this.$refs.nameInput.focus();
   }
 };
 </script>
@@ -54,22 +58,6 @@ export default {
       line-height: 20px;
 
       color: #27272e;
-    }
-    input {
-      display: block;
-      margin: auto;
-      background: #e0e6eb;
-      border-radius: 4px;
-      width: 100%;
-      -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-      -moz-box-sizing: border-box; /* Firefox, other Gecko */
-      box-sizing: border-box; /* Opera/IE 8+ */
-      max-width: 300px;
-      height: 50px;
-      border: none;
-      padding-left: 15px;
-      font-size: 16px;
-      line-height: 23px;
     }
   }
   .name-tag {
@@ -114,8 +102,21 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      p {
-        margin: 0px;
+
+      input {
+        display: block;
+        margin: auto;
+        background: #f2f2f2;
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box; /* Firefox, other Gecko */
+        box-sizing: border-box; /* Opera/IE 8+ */
+        max-width: 300px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 23px;
+        border: none;
+        outline: none;
+        text-align: center;
       }
     }
     .bottom {

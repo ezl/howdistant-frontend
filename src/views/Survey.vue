@@ -39,7 +39,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding: 10px 40px;
+  padding: 10px 35px;
   max-width: 500px;
   margin: auto;
   text-align: left;

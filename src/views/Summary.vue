@@ -56,11 +56,9 @@
               )
               .reverse()"
             :key="`warning-${optIdx}`"
+            @click="toggleWarningModal(option, question)"
           >
-            <div
-              class="img_block"
-              @click="toggleWarningModal(option, question)"
-            >
+            <div class="img_block">
               <img v-if="optIdx === 0" src="@/assets/images/warning.svg" />
             </div>
             <div class="span_block">

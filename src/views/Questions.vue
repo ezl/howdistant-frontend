@@ -16,7 +16,7 @@
         <label
           v-for="(opt, idx) in currentQuestion.options"
           :key="idx"
-          class="option"
+          class="option radio"
           :class="{
             active:
               currentAnswer === opt.value ||
@@ -191,6 +191,12 @@ export default {
       margin-left: 10px;
     }
   }
+  .option:first-child {
+    border-radius: 10px 10px 0px 0px;
+  }
+  .option:last-child {
+    border-radius: 0px 0px 10px 10px;
+  }
   .option:nth-child(2) {
     background-color: rgba(0, 0, 0, 0.02);
   }
@@ -207,10 +213,27 @@ export default {
     background-color: rgba(0, 0, 0, 0.12);
   }
   .option.active {
-    background: linear-gradient(328.85deg, #387cdb -16.63%, #387cdb 216.13%);
+    background: rgba(56, 124, 219, 1);
+
     p {
       color: #ffffff;
     }
+  }
+
+  .option.radio.active:nth-child(1) {
+    background: rgba(56, 124, 219, 0.8);
+  }
+  .option.radio.active:nth-child(2) {
+    background: rgba(56, 124, 219, 0.9);
+  }
+  .option.radio.active:nth-child(3) {
+    background: rgba(56, 124, 219, 1);
+  }
+  .option.radio.active:nth-child(4) {
+    background: rgba(56, 124, 219, 1.1);
+  }
+  .option.radio.active:nth-child(5) {
+    background: rgba(56, 124, 219, 1.2);
   }
 }
 .actions {
