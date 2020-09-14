@@ -1,11 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Landing from "@/views/Landing.vue";
-import Survey from "@/views/Survey.vue";
-import Name from "@/views/Name.vue";
-import Questions from "@/views/Questions.vue";
-import Complete from "@/views/Complete.vue";
-import Summary from "@/views/Summary.vue";
+
+import Survey from "@/views/surveys/Survey.vue";
+import Name from "@/views/surveys/Name.vue";
+import Questions from "@/views/surveys/Questions.vue";
+import Complete from "@/views/surveys/Complete.vue";
+import Summary from "@/views/surveys/Summary.vue";
 
 Vue.use(VueRouter);
 

@@ -184,7 +184,7 @@ export default {
       height: 50px;
       width: 250px;
       box-sizing: border-box;
-      background: url("../assets/images/link.svg") no-repeat scroll 10px 15px;
+      background: url("../../assets/images/link.svg") no-repeat scroll 10px 15px;
       padding-left: 40px;
       background-color: #f0f2f5;
     }

@@ -65,7 +65,7 @@ export default {
   },
   mounted() {
     this.$refs.nameInput.focus();
-    if (this.$parent.invited) {
+    if (this.$route.params.id) {
       this.toggleInfoModal();
     }
   }
