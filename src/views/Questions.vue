@@ -44,7 +44,7 @@
         <label
           v-for="(opt, idx) in currentQuestion.options"
           :key="idx"
-          class="option"
+          class="option checkbox"
           :class="{ active: currentAnswer.includes(opt.value) }"
         >
           <input
@@ -68,6 +68,39 @@
         "
       />
     </div>
+
+    <modal
+      class="copy-link-modal"
+      v-if="showCopyLinkModal"
+      @close="toggleCopyLinkModal"
+    >
+      <div slot="body">
+        <h4>That's it, you just made socializing easier.</h4>
+        <p>
+          Send the link below to friends and family to compare answers and make
+          your reunion safe and comfortable for everyone.
+        </p>
+        <div class="link">
+          <input type="text" :value="bundleLink" ref="bundleLink" />
+          <div class="copy" @click="copyUrl">
+            <p>Copy</p>
+          </div>
+        </div>
+        <div class="copied" v-if="copied">
+          <img src="@/assets/images/thumbup.png" />
+          <p>link copied!</p>
+        </div>
+        <p>
+          Save this link, it is your comparison page, and will update as friends
+          and family members answer the questions.
+        </p>
+
+        <primary-button
+          @click="shareSurvey"
+          :label="hasShare ? 'Share to compare' : 'Copy link to share'"
+        />
+      </div>
+    </modal>
   </div>
 </template>
 <script>
@@ -77,7 +110,9 @@ export default {
     return {
       currentIndex: 0,
       currentQuestion: {},
-      currentAnswer: null
+      currentAnswer: null,
+      showCopyLinkModal: false,
+      copied: false
     };
   },
   computed: {
@@ -89,6 +124,15 @@ export default {
         opt => opt.value === this.currentAnswer
       );
       return option;
+    },
+    bundleLink() {
+      return `${location.origin}/${this.$parent.bundle.id}/`;
+    },
+    hasShare() {
+      if (navigator && navigator.share) {
+        return true;
+      }
+      return false;
     }
   },
   mounted() {
@@ -102,6 +146,17 @@ export default {
     this.currentAnswer = this.currentQuestion.answer;
   },
   methods: {
+    toggleCopyLinkModal() {
+      this.showCopyLinkModal = !this.showCopyLinkModal;
+    },
+    shareSurvey() {
+      if (this.hasShare) {
+        navigator.share({
+          title: "How Distant?",
+          url: this.bundleLink
+        });
+      }
+    },
     async submitSurvey() {
       const { name, bundleId } = this.$parent;
       const answers = this.$parent.questions.map(q => q.answer);
@@ -120,6 +175,7 @@ export default {
       this.currentQuestion.answer = this.currentAnswer;
       if (this.currentIndex === this.$parent.questions.length - 1) {
         await this.submitSurvey();
+
         this.$router.push({
           name: "complete"
         });
@@ -191,29 +247,38 @@ export default {
       margin-left: 10px;
     }
   }
+
+  .option.checkbox:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+
+  .option.checkbox:nth-child(even) {
+    background-color: #f0f0f0;
+  }
+
   .option:first-child {
     border-radius: 10px 10px 0px 0px;
   }
   .option:last-child {
     border-radius: 0px 0px 10px 10px;
   }
-  .option:nth-child(2) {
+  .option.radio:nth-child(2) {
     background-color: rgba(0, 0, 0, 0.02);
   }
-  .option:nth-child(3) {
+  .option.radio:nth-child(3) {
     background-color: rgba(0, 0, 0, 0.05);
   }
-  .option:nth-child(4) {
+  .option.radio:nth-child(4) {
     background-color: rgba(0, 0, 0, 0.08);
   }
-  .option:nth-child(5) {
+  .option.radio:nth-child(5) {
     background-color: rgba(0, 0, 0, 0.1);
   }
-  .option:nth-child(6) {
+  .option.radio:nth-child(6) {
     background-color: rgba(0, 0, 0, 0.12);
   }
   .option.active {
-    background: rgba(56, 124, 219, 1);
+    background: rgba(56, 124, 219, 1) !important;
 
     p {
       color: #ffffff;
@@ -242,5 +307,71 @@ export default {
   align-items: center;
   justify-content: center;
   padding-top: 20px;
+}
+
+.copy-link-modal {
+  h4 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 30px;
+
+    color: #27272e;
+  }
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .link {
+    display: flex;
+    flex-direction: row;
+    input {
+      border: none;
+      border-radius: 8px 0px 0px 8px;
+      height: 50px;
+      width: 250px;
+      box-sizing: border-box;
+      background: url("../assets/images/link.svg") no-repeat scroll 10px 15px;
+      padding-left: 40px;
+      background-color: #f0f2f5;
+    }
+    .copy {
+      width: 60px;
+      height: 50px;
+      background: #2671d9;
+      border-radius: 0px 8px 8px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 18px;
+        /* identical to box height */
+
+        color: #ffffff;
+      }
+    }
+  }
+  .copied {
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    p {
+      color: #2671d9;
+      margin: 0px 5px;
+    }
+  }
 }
 </style>

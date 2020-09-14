@@ -25,68 +25,111 @@
       >
         <h4>{{ question.question }}</h4>
         <div class="options">
+          <!-- START Unanimous Options -->
           <div
-            class="option"
-            v-for="(option, optIdx) in question.options
-              .filter(
+            class="option_group unanimous"
+            v-if="
+              question.options.filter(
                 o =>
                   o.comfortable &&
                   o.comfortable.length > 0 &&
                   o.comfortable.length === surveyCount
-              )
-              .reverse()"
-            :key="`unanimous-${optIdx}`"
+              ).length
+            "
           >
-            <div class="img_block">
-              <img v-if="optIdx === 0" src="@/assets/images/unanimous.svg" />
+            <div class="icon">
+              <img src="@/assets/images/check.svg" />
             </div>
-            <div class="span_block">
-              <span class="unanimous">{{ option.label }}</span>
+            <div class="labels">
+              <div
+                class="option"
+                v-for="(option, optIdx) in question.options
+                  .filter(
+                    o =>
+                      o.comfortable &&
+                      o.comfortable.length > 0 &&
+                      o.comfortable.length === surveyCount
+                  )
+                  .reverse()"
+                :key="`unanimous-${optIdx}`"
+              >
+                <div class="span_block">
+                  <span class="unanimous">{{ option.label }}</span>
+                </div>
+              </div>
             </div>
           </div>
+          <!-- END Unanimous Options -->
 
+          <!-- START Some Options -->
           <div
-            class="option"
-            v-for="(option, optIdx) in question.options
-              .filter(
+            class="option_group some"
+            v-if="
+              question.options.filter(
                 o =>
                   o.comfortable &&
                   o.comfortable.length > 0 &&
                   o.comfortable.length < surveyCount
-              )
-              .reverse()"
-            :key="`warning-${optIdx}`"
-            @click="toggleWarningModal(option, question)"
+              ).length
+            "
           >
-            <div class="img_block">
-              <img v-if="optIdx === 0" src="@/assets/images/warning.svg" />
+            <div class="icon">
+              <img src="@/assets/images/exclamation.svg" />
             </div>
-            <div class="span_block">
-              <span class="warning">{{ option.label }}</span>
+            <div class="labels">
+              <div
+                class="option"
+                v-for="(option, optIdx) in question.options
+                  .filter(
+                    o =>
+                      o.comfortable &&
+                      o.comfortable.length > 0 &&
+                      o.comfortable.length < surveyCount
+                  )
+                  .reverse()"
+                :key="`warning-${optIdx}`"
+                @click="toggleWarningModal(option, question)"
+              >
+                <div class="span_block">
+                  <span class="warning">{{ option.label }}</span>
+                </div>
+              </div>
             </div>
           </div>
+          <!-- End Some Options -->
 
+          <!-- START None Options -->
           <div
-            class="option"
-            v-for="(option, optIdx) in question.options
-              .filter(o => !o.comfortable || !o.comfortable.length)
-              .reverse()"
-            :key="`uncomfortable-${optIdx}`"
+            class="option_group none"
+            v-if="
+              question.options.filter(
+                o => !o.comfortable || !o.comfortable.length
+              ).length
+            "
           >
-            <div class="img_block">
-              <img
-                v-if="optIdx === 0"
-                src="@/assets/images/uncomfortable.svg"
-              />
+            <div class="icon">
+              <img src="@/assets/images/none.svg" />
             </div>
-            <div class="span_block">
-              <span class="uncomfortable">{{ option.label }}</span>
+            <div class="labels">
+              <div
+                class="option"
+                v-for="(option, optIdx) in question.options
+                  .filter(o => !o.comfortable || !o.comfortable.length)
+                  .reverse()"
+                :key="`uncomfortable-${optIdx}`"
+              >
+                <div class="span_block">
+                  <span class="uncomfortable">{{ option.label }}</span>
+                </div>
+              </div>
             </div>
           </div>
+          <!-- END None Options -->
         </div>
       </div>
     </div>
 
+    <!-- START Option Detail Modal -->
     <modal
       class="warning-modal"
       v-if="showWarningModal"
@@ -147,6 +190,40 @@
         </div>
       </div>
     </modal>
+    <!-- END Option Detail Modal -->
+
+    <!-- START Info Modal -->
+    <modal class="info-modal" v-if="showInfoModal" @close="toggleInfoModal">
+      <div slot="body">
+        <h4>
+          The hard work is done,
+          <br />
+          get ready to socialize.
+        </h4>
+
+        <p>
+          Sometimes things aren’t clear cut, and your group will have split
+          opinions. Use the key below when looking at your group’s answers.
+        </p>
+        <div class="labels">
+          <div class="label unanimous">
+            <div class="icon"><img src="@/assets/images/check.svg" /></div>
+            <div class="text"><p>Everyone is comfortable with it</p></div>
+          </div>
+          <div class="label some">
+            <div class="icon">
+              <img src="@/assets/images/exclamation.svg" />
+            </div>
+            <div class="text"><p>Some are comfortable with it</p></div>
+          </div>
+
+          <div class="label none">
+            <div class="icon"><img src="@/assets/images/none.svg" /></div>
+            <div class="text"><p>No one was comfortable with it</p></div>
+          </div>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 <script>
@@ -158,7 +235,8 @@ export default {
       currentTab: "interaction",
       currentOption: null,
       currentQuestion: null,
-      showWarningModal: false
+      showWarningModal: false,
+      showInfoModal: false
     };
   },
   async beforeRouteEnter(to, from, next) {
@@ -188,6 +266,9 @@ export default {
       return this.$parent.bundle.surveys.length;
     }
   },
+  mounted() {
+    this.toggleInfoModal();
+  },
   /*
   async mounted() {
     if (!this.$parent.bundle || !this.$parent.bundle.summary) {
@@ -205,6 +286,9 @@ export default {
 
       this.currentOption = option;
       this.currentQuestion = question;
+    },
+    toggleInfoModal() {
+      this.showInfoModal = !this.showInfoModal;
     }
   }
 };
@@ -275,7 +359,7 @@ export default {
     color: #00844c;
   }
   .warning {
-    color: rgba(39, 39, 46, 0.6);
+    color: #956b00;
   }
   .uncomfortable {
     text-decoration-line: line-through;
@@ -283,6 +367,36 @@ export default {
     color: #8b3939;
   }
 }
+.option_group {
+  display: flex;
+  flex-direction: row;
+  .icon {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .labels {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.option_group:first-child {
+  border-radius: 10px 10px 0px 0px;
+}
+.option_group:last-child {
+  border-radius: 0px 0px 10px 10px;
+}
+.option_group.unanimous {
+  background: #eefcf0;
+}
+.option_group.some {
+  background: #fdfcea;
+}
+.option_group.none {
+  background: #fdeaea;
+}
+
 .warning-modal {
   .question {
     p {
@@ -340,6 +454,64 @@ export default {
     .header_block {
       span {
         color: #8b3939;
+      }
+    }
+  }
+}
+.info-modal {
+  h4 {
+    font-size: 18px;
+    line-height: 23px;
+    color: #27272e;
+    margin: 10px 0px;
+  }
+  p {
+    font-size: 16px;
+    line-height: 20px;
+
+    color: #505055;
+  }
+  .labels {
+    .label {
+      display: flex;
+      height: 40px;
+    }
+    .icon {
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .text {
+      display: flex;
+      align-items: center;
+      p {
+        margin: 0px;
+        font-size: 14px;
+      }
+    }
+    .unanimous {
+      background: #eefcf0;
+      .text {
+        p {
+          color: #1e8e37;
+        }
+      }
+    }
+    .some {
+      background: #fdfcea;
+      .text {
+        p {
+          color: #ca9100;
+        }
+      }
+    }
+    .none {
+      background: #fdeaea;
+      .text {
+        p {
+          color: #b74412;
+        }
       }
     }
   }

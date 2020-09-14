@@ -17,7 +17,8 @@ export default {
       answers: [],
       questions: [],
       bundle: null,
-      bundleId: null
+      bundleId: null,
+      invited: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -30,9 +31,15 @@ export default {
       vm.questions = response.data.form;
     });
   },
-  mounted() {
-    if (this.$route.params.bundleId) {
-      this.bundleId = this.$route.params.bundleId;
+  async mounted() {
+    if (this.$route.params.id) {
+      this.bundleId = this.$route.params.id;
+      this.invited = true;
+
+      const response = await axios.get(
+        `${process.env.VUE_APP_BACKEND_URI}/api/v1/survey_bundles/${this.bundleId}`
+      );
+      this.bundle = response.data;
     }
   }
 };

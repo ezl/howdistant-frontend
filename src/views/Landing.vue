@@ -21,7 +21,8 @@
         </h4>
       </div>
       <div class="title">
-        Avoid the awkward reunion.
+        Avoid the <br />
+        awkward reunion.
       </div>
       <div class="content">
         <p>
@@ -48,8 +49,7 @@ export default {
   methods: {
     startSurvey() {
       this.$router.push({
-        name: "name",
-        params: { bundleId: this.$route.params.id }
+        name: "name"
       });
     }
   }

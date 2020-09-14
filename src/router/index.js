@@ -29,6 +29,14 @@ const routes = [
         }
       },
       {
+        path: "/:id",
+        name: "invited",
+        component: Name,
+        meta: {
+          label: () => "What's your name?"
+        }
+      },
+      {
         name: "questions",
         path: "questions",
         component: Questions,
@@ -63,11 +71,6 @@ const routes = [
         }
       }
     ]
-  },
-  {
-    path: "/:id",
-    name: "invited",
-    component: Landing
   }
 ];
 

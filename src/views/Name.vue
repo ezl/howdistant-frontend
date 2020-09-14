@@ -32,21 +32,48 @@
         :disabled="!$parent.name"
       />
     </div>
+
+    <modal class="info-modal" v-if="showInfoModal" @close="toggleInfoModal">
+      <div slot="header"></div>
+      <div slot="body">
+        <h4>{{ $parent.bundle.surveys[0].name }} wants to hang</h4>
+
+        <p>
+          Answer 8 quick questions and we’ll compare your answers to make
+          visiting more comfortable for everyone.
+        </p>
+
+        <primary-button @click="toggleInfoModal" label="Answer Questions" />
+      </div>
+    </modal>
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      showInfoModal: false
+    };
+  },
   methods: {
     goToQuestions() {
       this.$router.push({ name: "questions", hash: "#1" });
+    },
+    toggleInfoModal() {
+      this.showInfoModal = !this.showInfoModal;
     }
   },
   mounted() {
     this.$refs.nameInput.focus();
+    if (this.$parent.invited) {
+      this.toggleInfoModal();
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
+@import url("https://fonts.googleapis.com/css?family=Yellowtail");
+
 .name-content {
   .input-content {
     margin-top: 50px;
@@ -110,13 +137,15 @@ export default {
         -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
         -moz-box-sizing: border-box; /* Firefox, other Gecko */
         box-sizing: border-box; /* Opera/IE 8+ */
-        max-width: 300px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 23px;
+        width: 100%;
+        height: 55px;
+        font-size: 40px;
+        line-height: 55px;
+        color: #27272e;
         border: none;
         outline: none;
         text-align: center;
+        font-family: "Yellowtail";
       }
     }
     .bottom {
@@ -132,6 +161,22 @@ export default {
     align-items: center;
     justify-content: center;
     padding-top: 30px;
+  }
+}
+
+.info-modal {
+  h4 {
+    font-size: 24px;
+    line-height: 30px;
+    color: #27272e;
+    margin: 10px 0px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 18px;
+    color: #27272e;
+    margin-bottom: 30px;
   }
 }
 </style>
