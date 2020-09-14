@@ -326,6 +326,7 @@ export default {
       padding: 5px 0px;
       display: flex;
       align-items: center;
+      padding-right: 5px;
 
       .dash-top {
         border-left: 1px dashed #ffffff;
@@ -349,12 +350,12 @@ export default {
         font-weight: normal;
         font-size: 14px;
         line-height: 18px;
-        max-width: 190px;
 
         color: #27272e;
       }
       .emoji {
         font-size: 25px;
+        min-width: fit-content;
       }
 
       input {
