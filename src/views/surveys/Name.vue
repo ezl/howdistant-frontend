@@ -138,7 +138,7 @@ export default {
         -moz-box-sizing: border-box; /* Firefox, other Gecko */
         box-sizing: border-box; /* Opera/IE 8+ */
         width: 100%;
-        height: 55px;
+        height: 100%;
         font-size: 40px;
         line-height: 55px;
         color: #27272e;

@@ -315,14 +315,11 @@ export default {
   }
   .options {
     position: absolute;
-    top: 220px;
+    top: 200px;
     bottom: 100px;
     left: 0px;
     right: 0px;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    overflow-y: scroll;
 
     .option {
       height: 65px;
