@@ -1,63 +1,65 @@
 <template>
   <div>
-    <div class="progress">
-      <div
-        class="dot"
-        :class="{ active: idx === currentIndex, done: idx < currentIndex }"
-        v-for="(q, idx) in $parent.questions"
-        :key="idx"
-      ></div>
-    </div>
-    <div class="question">
-      <h4>{{ currentQuestion.question }}</h4>
-    </div>
-    <div class="options">
-      <template v-if="currentQuestion.type === 'radio'">
-        <label
-          v-for="(opt, idx) in currentQuestion.options"
+    <div class="content">
+      <div class="progress">
+        <div
+          class="dot"
+          :class="{ active: idx === currentIndex, done: idx < currentIndex }"
+          v-for="(q, idx) in $parent.questions"
           :key="idx"
-          class="option radio"
-          :class="{
-            active:
-              currentAnswer === opt.value ||
-              (currentAnswerOption &&
-                currentAnswerOption.depend.includes(opt.value))
-          }"
-        >
-          <input
-            type="radio"
-            :checked="
-              currentAnswer === opt.value ||
+        ></div>
+      </div>
+      <div class="question">
+        <h4>{{ currentQuestion.question }}</h4>
+      </div>
+      <div class="options">
+        <template v-if="currentQuestion.type === 'radio'">
+          <label
+            v-for="(opt, idx) in currentQuestion.options"
+            :key="idx"
+            class="option radio"
+            :class="{
+              active:
+                currentAnswer === opt.value ||
                 (currentAnswerOption &&
                   currentAnswerOption.depend.includes(opt.value))
-            "
-            :id="idx"
-            :value="opt.value"
-            name="options"
-            v-model="currentAnswer"
-          />
-          <p class="emoji">{{ opt.icon }}</p>
-          <p>{{ opt.label }}</p>
-        </label>
-      </template>
-      <template v-if="currentQuestion.type === 'checkbox'">
-        <label
-          v-for="(opt, idx) in currentQuestion.options"
-          :key="idx"
-          class="option checkbox"
-          :class="{ active: currentAnswer.includes(opt.value) }"
-        >
-          <input
-            type="checkbox"
-            :id="idx"
-            :value="opt.value"
-            name="options"
-            v-model="currentAnswer"
-          />
-          <p class="emoji">{{ opt.icon }}</p>
-          <p>{{ opt.label }}</p>
-        </label>
-      </template>
+            }"
+          >
+            <input
+              type="radio"
+              :checked="
+                currentAnswer === opt.value ||
+                  (currentAnswerOption &&
+                    currentAnswerOption.depend.includes(opt.value))
+              "
+              :id="idx"
+              :value="opt.value"
+              name="options"
+              v-model="currentAnswer"
+            />
+            <p class="emoji">{{ opt.icon }}</p>
+            <p>{{ opt.label }}</p>
+          </label>
+        </template>
+        <template v-if="currentQuestion.type === 'checkbox'">
+          <label
+            v-for="(opt, idx) in currentQuestion.options"
+            :key="idx"
+            class="option checkbox"
+            :class="{ active: currentAnswer.includes(opt.value) }"
+          >
+            <input
+              type="checkbox"
+              :id="idx"
+              :value="opt.value"
+              name="options"
+              v-model="currentAnswer"
+            />
+            <p class="emoji">{{ opt.icon }}</p>
+            <p>{{ opt.label }}</p>
+          </label>
+        </template>
+      </div>
     </div>
     <div class="actions">
       <primary-button
@@ -189,123 +191,139 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.progress {
-  max-width: 230px;
-  width: auto;
-  display: inline-block;
-  margin: auto;
-  position: relative;
-  left: 50%; // Move the element to the left by 50% of the container's width
-  transform: translateX(-50%);
-
-  .dot {
+.content {
+  .progress {
+    max-width: 230px;
+    width: auto;
     display: inline-block;
-    background: #e6e6e6;
-    border-radius: 29px;
-    width: 8px;
-    height: 8px;
-    margin: 0px 5px;
-  }
-  .active {
-    background: #2671d9;
-  }
-  .done {
-    background: rgba(38, 113, 217, 0.6);
-  }
-}
-.question {
-  h4 {
-    font-weight: normal;
-    font-size: 20px;
-    line-height: 24px;
-    color: #505055;
-  }
-}
-.options {
-  .option {
-    height: 65px;
-    padding: 5px 0px;
-    display: flex;
-    align-items: center;
+    margin: auto;
+    position: relative;
+    left: 50%; // Move the element to the left by 50% of the container's width
+    transform: translateX(-50%);
 
-    p {
-      margin-left: 10px;
-      font-style: normal;
+    .dot {
+      display: inline-block;
+      background: #e6e6e6;
+      border-radius: 29px;
+      width: 8px;
+      height: 8px;
+      margin: 0px 5px;
+    }
+    .active {
+      background: #2671d9;
+    }
+    .done {
+      background: rgba(38, 113, 217, 0.6);
+    }
+  }
+  .question {
+    h4 {
       font-weight: normal;
-      font-size: 14px;
-      line-height: 18px;
-      max-width: 190px;
-
-      color: #27272e;
-    }
-    .emoji {
-      font-size: 25px;
-    }
-
-    input {
-      margin-left: 10px;
+      font-size: 20px;
+      line-height: 24px;
+      color: #505055;
     }
   }
+  .options {
+    position: absolute;
+    top: 200px;
+    bottom: 100px;
+    left: 0px;
+    right: 0px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
-  .option.checkbox:nth-child(odd) {
-    background-color: #f9f9f9;
-  }
+    .option {
+      height: 65px;
+      padding: 5px 0px;
+      display: flex;
+      align-items: center;
 
-  .option.checkbox:nth-child(even) {
-    background-color: #f0f0f0;
-  }
+      p {
+        margin-left: 10px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 18px;
+        max-width: 190px;
 
-  .option:first-child {
-    border-radius: 10px 10px 0px 0px;
-  }
-  .option:last-child {
-    border-radius: 0px 0px 10px 10px;
-  }
-  .option.radio:nth-child(2) {
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-  .option.radio:nth-child(3) {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  .option.radio:nth-child(4) {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-  .option.radio:nth-child(5) {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-  .option.radio:nth-child(6) {
-    background-color: rgba(0, 0, 0, 0.12);
-  }
-  .option.active {
-    background: rgba(56, 124, 219, 1) !important;
+        color: #27272e;
+      }
+      .emoji {
+        font-size: 25px;
+      }
 
-    p {
-      color: #ffffff;
+      input {
+        margin-left: 10px;
+      }
     }
-  }
 
-  .option.radio.active:nth-child(1) {
-    background: rgba(56, 124, 219, 0.8);
-  }
-  .option.radio.active:nth-child(2) {
-    background: rgba(56, 124, 219, 0.9);
-  }
-  .option.radio.active:nth-child(3) {
-    background: rgba(56, 124, 219, 1);
-  }
-  .option.radio.active:nth-child(4) {
-    background: rgba(56, 124, 219, 1.1);
-  }
-  .option.radio.active:nth-child(5) {
-    background: rgba(56, 124, 219, 1.2);
+    .option.checkbox:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+
+    .option.checkbox:nth-child(even) {
+      background-color: #f0f0f0;
+    }
+
+    .option:first-child {
+      border-radius: 10px 10px 0px 0px;
+    }
+    .option:last-child {
+      border-radius: 0px 0px 10px 10px;
+    }
+    .option.radio:nth-child(2) {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    .option.radio:nth-child(3) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    .option.radio:nth-child(4) {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+    .option.radio:nth-child(5) {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    .option.radio:nth-child(6) {
+      background-color: rgba(0, 0, 0, 0.12);
+    }
+    .option.active {
+      background: rgba(56, 124, 219, 1) !important;
+
+      p {
+        color: #ffffff;
+      }
+    }
+
+    .option.radio.active:nth-child(1) {
+      background: rgba(56, 124, 219, 0.8);
+    }
+    .option.radio.active:nth-child(2) {
+      background: rgba(56, 124, 219, 0.9);
+    }
+    .option.radio.active:nth-child(3) {
+      background: rgba(56, 124, 219, 1);
+    }
+    .option.radio.active:nth-child(4) {
+      background: rgba(56, 124, 219, 1.1);
+    }
+    .option.radio.active:nth-child(5) {
+      background: rgba(56, 124, 219, 1.2);
+    }
   }
 }
+
 .actions {
-  height: 150px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 .copy-link-modal {
