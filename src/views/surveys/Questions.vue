@@ -25,6 +25,15 @@
                   currentAnswerOption.depend.includes(opt.value))
             }"
           >
+            <div
+              class="dash-top"
+              v-if="
+                idx !== 0 &&
+                  currentAnswerOption &&
+                  (currentAnswer === opt.value ||
+                    currentAnswerOption.depend.includes(opt.value))
+              "
+            ></div>
             <input
               type="radio"
               :checked="
@@ -54,6 +63,7 @@
               :value="opt.value"
               name="options"
               v-model="currentAnswer"
+              class="checkmark"
             />
             <p class="emoji">{{ opt.icon }}</p>
             <p>{{ opt.label }}</p>
@@ -192,6 +202,85 @@ export default {
 </script>
 <style lang="scss" scoped>
 .content {
+  label > input[type="radio"] {
+    display: none;
+  }
+  label > input[type="radio"] + *::before {
+    content: " ";
+    display: inline-block;
+    vertical-align: bottom;
+    border: 1px solid white;
+    width: 25px;
+    height: 25px;
+    margin-right: 1rem;
+    border-radius: 50%;
+    border: 1px solid rgba(39, 39, 46, 0.6);
+  }
+
+  label.active > input[type="radio"] + *::before {
+    width: 25px;
+    height: 25px;
+    margin-right: 1rem;
+    border-radius: 50%;
+    border: 1px solid white;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-image: url("../../assets/images/checked-white.svg");
+    background-color: rgba(56, 124, 219, 0.8);
+    background-size: auto;
+  }
+
+  label > input[type="radio"]:checked + * {
+    color: rgba(56, 124, 219, 0.8);
+  }
+  label > input[type="radio"]:checked + *::before {
+    width: 25px;
+    height: 25px;
+    margin-right: 1rem;
+    border-radius: 50%;
+    border: 1px solid white;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-image: url("../../assets/images/checked.svg");
+    background-color: #fff;
+    background-size: auto;
+  }
+
+  label > input[type="checkbox"] {
+    display: none;
+  }
+  label > input[type="checkbox"] + *::before {
+    content: " ";
+    display: inline-block;
+    vertical-align: bottom;
+    border: 1px solid white;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    margin-right: 1rem;
+    border: 1px solid rgba(39, 39, 46, 0.6);
+  }
+
+  label > input[type="checkbox"]:checked + * {
+    color: rgba(56, 124, 219, 0.8);
+  }
+  label > input[type="checkbox"]:checked + *::before {
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+    border-radius: 5px;
+    border: 1px solid white;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-image: url("../../assets/images/checked.svg");
+    background-color: #fff;
+    background-size: auto;
+  }
+
   .progress {
     max-width: 230px;
     width: auto;
@@ -226,20 +315,36 @@ export default {
   }
   .options {
     position: absolute;
-    top: 200px;
+    top: 220px;
     bottom: 100px;
     left: 0px;
     right: 0px;
     overflow: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
 
     .option {
       height: 65px;
       padding: 5px 0px;
       display: flex;
       align-items: center;
+
+      .dash-top {
+        border-left: 1px dashed #ffffff;
+        position: relative;
+        height: 50px;
+        top: -38px;
+        left: 24px;
+      }
+
+      .dash-bottom {
+        border-left: 1px dashed #ffffff;
+        position: relative;
+        height: 22px;
+        top: 25px;
+        left: 24px;
+      }
 
       p {
         margin-left: 10px;
@@ -289,7 +394,7 @@ export default {
     .option.radio:nth-child(6) {
       background-color: rgba(0, 0, 0, 0.12);
     }
-    .option.active {
+    .option.checkbox.active {
       background: rgba(56, 124, 219, 1) !important;
 
       p {
@@ -312,6 +417,9 @@ export default {
     .option.radio.active:nth-child(5) {
       background: rgba(56, 124, 219, 1.2);
     }
+  }
+  .options > :first-child {
+    margin-top: auto;
   }
 }
 
