@@ -504,7 +504,7 @@ export default {
 @media screen and (max-width: 320px) {
   .content {
     .options {
-      height: 55vh;
+      height: 45vh;
 
       .option {
         .dash-top {
