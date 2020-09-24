@@ -16,8 +16,7 @@
         your reunion safe and comfortable for everyone.
       </p>
       <p>
-        We want socializing to be as easy as possible, so save this link. It is
-        your comparison page, and it will update as friends and family members
+        Save the results page, and it will update as friends and family members
         answer the questions.
       </p>
 
@@ -144,7 +143,8 @@ export default {
   }
 }
 .actions {
-  margin-top: 50px;
+  margin-top: 20vh;
+
   .copy-link {
     margin-top: 30px;
     text-align: center;
@@ -223,6 +223,13 @@ export default {
       color: #2671d9;
       margin: 0px 5px;
     }
+  }
+}
+
+/* iPhone 5/SE */
+@media (max-width: 320px) {
+  .actions {
+    margin-top: 20px;
   }
 }
 </style>

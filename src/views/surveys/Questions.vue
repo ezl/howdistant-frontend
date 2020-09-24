@@ -1,16 +1,8 @@
 <template>
   <div>
     <div class="content">
-      <div class="progress">
-        <div
-          class="dot"
-          :class="{ active: idx === currentIndex, done: idx < currentIndex }"
-          v-for="(q, idx) in $parent.questions"
-          :key="idx"
-        ></div>
-      </div>
       <div class="question">
-        <h4>{{ currentQuestion.question }}</h4>
+        <div class="question_text" v-html="currentQuestionText"></div>
       </div>
       <div class="options">
         <template v-if="currentQuestion.type === 'radio'">
@@ -74,12 +66,13 @@
     <div class="actions">
       <primary-button
         @click="goToNextQuestion"
-        :disabled="currentQuestion.required && !currentAnswer"
+        :disabled="!isValid"
         :label="
           currentIndex === $parent.questions.length - 1 ? 'Submit' : 'Next'
         "
       />
     </div>
+
     <modal
       class="copy-link-modal"
       v-if="showCopyLinkModal"
@@ -127,6 +120,17 @@ export default {
     };
   },
   computed: {
+    currentQuestionText() {
+      if (!this.currentQuestion) {
+        return "";
+      }
+      return `<h4>${this.currentQuestion.question}</h4>`.replace(
+        /which|greetings|where|(what length)|when|(wear a mask)|eating|(how many people)/gi,
+        function(x) {
+          return `<span>${x}</span>`;
+        }
+      );
+    },
     currentAnswerOption() {
       if (!this.currentAnswer) {
         return null;
@@ -144,6 +148,14 @@ export default {
         return true;
       }
       return false;
+    },
+    isValid() {
+      if (!this.currentQuestion || !this.currentAnswer) {
+        return true;
+      }
+      return this.currentQuestion.type === "radio"
+        ? !!this.currentAnswer
+        : !!this.currentAnswer.length;
     }
   },
   mounted() {
@@ -281,48 +293,41 @@ export default {
     background-size: auto;
   }
 
-  .progress {
-    max-width: 230px;
-    width: auto;
-    display: inline-block;
-    margin: auto;
-    position: relative;
-    left: 50%; // Move the element to the left by 50% of the container's width
-    transform: translateX(-50%);
-
-    .dot {
-      display: inline-block;
-      background: #e6e6e6;
-      border-radius: 29px;
-      width: 8px;
-      height: 8px;
-      margin: 0px 5px;
-    }
-    .active {
-      background: #2671d9;
-    }
-    .done {
-      background: rgba(38, 113, 217, 0.6);
-    }
-  }
   .question {
-    h4 {
-      font-weight: normal;
-      font-size: 20px;
-      line-height: 24px;
-      color: #505055;
+    .question_text {
+      ::v-deep h4 {
+        margin-top: 0px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 20px;
+        line-height: 24px;
+        color: #505055;
+      }
+
+      ::v-deep span {
+        font-weight: bold;
+        line-height: 30px;
+        background: linear-gradient(
+          to top,
+          rgba(38, 113, 217, 0.2) 50%,
+          transparent 50%
+        );
+      }
     }
   }
   .options {
-    position: absolute;
-    top: 200px;
-    bottom: 100px;
+    position: relative;
     left: 0px;
     right: 0px;
     overflow-y: scroll;
+    display: table-cell;
+    vertical-align: bottom;
+    min-height: 300px;
+    width: 100vh;
+    height: 50vh;
 
     .option {
-      height: 65px;
+      height: calc(100vw / 7);
       padding: 5px 0px;
       display: flex;
       align-items: center;
@@ -331,16 +336,8 @@ export default {
       .dash-top {
         border-left: 1px dashed #ffffff;
         position: relative;
-        height: 50px;
-        top: -38px;
-        left: 24px;
-      }
-
-      .dash-bottom {
-        border-left: 1px dashed #ffffff;
-        position: relative;
-        height: 22px;
-        top: 25px;
+        height: 35px;
+        top: -30px;
         left: 24px;
       }
 
@@ -399,6 +396,11 @@ export default {
         color: #ffffff;
       }
     }
+    .option.active {
+      p {
+        color: white;
+      }
+    }
 
     .option.radio.active:nth-child(1) {
       background: rgba(56, 124, 219, 0.8);
@@ -426,7 +428,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -494,6 +496,25 @@ export default {
     p {
       color: #2671d9;
       margin: 0px 5px;
+    }
+  }
+}
+
+/* iPhone 5/SE */
+@media screen and (max-width: 320px) {
+  .content {
+    .options {
+      height: 55vh;
+
+      .option {
+        .dash-top {
+          border-left: 1px dashed #ffffff;
+          position: relative;
+          height: 28px;
+          top: -28px;
+          left: 24px;
+        }
+      }
     }
   }
 }

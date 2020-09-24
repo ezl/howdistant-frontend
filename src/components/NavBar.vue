@@ -16,9 +16,17 @@
       </div>
     </template>
     <div class="label">
-      <p :class="{ questions: $route.name === 'questions' }">
+      <p v-if="currentRouteName !== 'questions'">
         {{ currentLabel }}
       </p>
+      <div v-if="currentRouteName === 'questions'" class="progress">
+        <div
+          class="dot"
+          :class="{ active: idx === currentIndex, done: idx < currentIndex }"
+          v-for="(q, idx) in $parent.questions"
+          :key="idx"
+        ></div>
+      </div>
     </div>
     <template v-if="showGroupButton">
       <div class="group" @click="toggleGroupModal">
@@ -67,6 +75,15 @@ export default {
     };
   },
   computed: {
+    currentIndex() {
+      if (!this.$route.hash.replace("#", "")) {
+        return 0;
+      }
+      return parseInt(this.$route.hash.replace("#", "")) - 1;
+    },
+    currentRouteName() {
+      return this.$route.name;
+    },
     currentLabel() {
       return this.$route.meta.label(this);
     },
@@ -151,6 +168,22 @@ export default {
     p.questions {
       font-size: 16px;
     }
+    .progress {
+      .dot {
+        display: inline-block;
+        background: #e6e6e6;
+        border-radius: 29px;
+        width: 8px;
+        height: 8px;
+        margin: 0px 5px;
+      }
+      .active {
+        background: #2671d9;
+      }
+      .done {
+        background: rgba(38, 113, 217, 0.6);
+      }
+    }
   }
   .group {
     width: 55px;
@@ -167,6 +200,7 @@ export default {
     }
   }
 }
+
 .group-modal {
   h4 {
     font-style: normal;
@@ -205,6 +239,19 @@ export default {
     .response:nth-child(even) {
       background: #f6f6f6;
       border-radius: 5px;
+    }
+  }
+}
+
+/* iPhone 5/SE */
+@media screen and (max-width: 320px) {
+  .nav {
+    height: 30px;
+    padding: 0px 15px;
+    .label {
+      p {
+        font-size: 18px;
+      }
     }
   }
 }

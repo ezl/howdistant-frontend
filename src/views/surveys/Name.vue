@@ -15,15 +15,10 @@
           autofocus
           ref="nameInput"
         />
+
         <!--<p>{{ $parent.name }}</p> -->
       </div>
       <div class="bottom"></div>
-    </div>
-    <div class="input-content">
-      <p>
-        We will display this name when we compare your answers to the answers of
-        your family and friends.
-      </p>
     </div>
     <div class="actions">
       <primary-button
@@ -157,10 +152,12 @@ export default {
     }
   }
   .actions {
+    /*
     display: flex;
     align-items: center;
     justify-content: center;
     padding-top: 30px;
+    */
   }
 }
 

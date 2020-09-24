@@ -15,11 +15,6 @@
           </h2>
         </div>
       </div>
-      <div class="subheader">
-        <h4>
-          You miss them, they miss you.
-        </h4>
-      </div>
       <div class="title">
         Avoid the <br />
         awkward reunion.
@@ -27,13 +22,8 @@
       <div class="content">
         <p>
           We know that navigating safe socializing in a Covid world is tricky,
-          we’re here to help make make that conversation easier in just 5
-          minutes.
-        </p>
-        <p>
-          Before you and your group meet in person, collectively answer a few
-          short questions so everyone knows how to meet without feeling
-          uncomfortable.
+          we’re here to help make make that conversation easier a few quick
+          questions.
         </p>
       </div>
 
@@ -83,25 +73,13 @@ export default {
       }
     }
   }
-  .subheader {
-    margin: 10px 0px;
-    h4 {
-      font-style: normal;
-      font-weight: normal;
-      font-size: 20px;
-      line-height: 25px;
-
-      color: #1f252e;
-      margin: 0px;
-    }
-  }
   .title {
     font-style: normal;
     font-weight: bold;
     font-size: 32px;
     line-height: 40px;
-
     color: #1f252e;
+    margin: 20px 0px;
   }
   .content {
     p {
@@ -109,16 +87,27 @@ export default {
       font-weight: normal;
       font-size: 16px;
       line-height: 20px;
-
-      color: #000000;
+      color: #1f252e;
       padding: 5px;
     }
   }
   .actions {
-    margin-top: 50px;
+    margin-top: 30vh;
   }
 }
 .nav {
   height: 50px;
+}
+
+/* iPhone 5/SE */
+@media (max-width: 320px) {
+  .landing {
+    padding: 10px 15px;
+  }
+  .container {
+    .actions {
+      margin-top: 0px;
+    }
+  }
 }
 </style>

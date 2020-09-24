@@ -46,9 +46,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding: 10px 35px;
+  padding: 10px 15px;
   max-width: 500px;
   margin: auto;
   text-align: left;
+}
+
+/* iPhone 5/SE */
+@media screen and (max-width: 320px) {
+  .container {
+    padding: 10px 5px;
+  }
 }
 </style>

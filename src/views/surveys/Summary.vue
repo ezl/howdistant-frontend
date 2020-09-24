@@ -63,6 +63,9 @@
           </div>
         </div>
       </div>
+      <div slot="footer">
+        <primary-button @click="toggleInfoModal" label="Okay" />
+      </div>
     </modal>
   </div>
 </template>
@@ -171,15 +174,17 @@ export default {
 
 .info-modal {
   h4 {
+    font-weight: normal;
     font-size: 18px;
     line-height: 23px;
     color: #27272e;
     margin: 10px 0px;
   }
   p {
+    font-style: normal;
+    font-weight: normal;
     font-size: 16px;
     line-height: 20px;
-
     color: #505055;
   }
   .labels {
@@ -230,6 +235,11 @@ export default {
           color: #b74412;
         }
       }
+    }
+  }
+  .modal-footer {
+    button {
+      width: 200px;
     }
   }
 }

@@ -55,8 +55,7 @@ const routes = [
         component: Complete,
         meta: {
           label: () => "",
-          showBackButton: false,
-          showCloseButton: true
+          showBackButton: false
         }
       },
       {
