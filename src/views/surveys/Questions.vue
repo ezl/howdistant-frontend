@@ -152,9 +152,14 @@ export default {
       return false;
     },
     isValid() {
-      if (!this.currentQuestion || !this.currentAnswer) {
+      if (!this.currentQuestion) {
         return true;
       }
+
+      if (this.currentQuestion.required === false) {
+        return true;
+      }
+
       return this.currentQuestion.type === "radio"
         ? !!this.currentAnswer
         : !!this.currentAnswer.length;
