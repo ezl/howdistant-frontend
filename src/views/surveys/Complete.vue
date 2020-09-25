@@ -327,7 +327,7 @@ export default {
 }
 </style>
 <style lang="scss">
-.toasted-container {
+.toasted-container.top-center.full-width {
   .enabled_sms_toast {
     background-color: #2671d9;
     font-family: Arial;
