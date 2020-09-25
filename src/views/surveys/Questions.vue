@@ -73,6 +73,7 @@
       />
     </div>
 
+    <!--
     <modal
       class="copy-link-modal"
       v-if="showCopyLinkModal"
@@ -105,6 +106,7 @@
         />
       </div>
     </modal>
+    -->
   </div>
 </template>
 <script>

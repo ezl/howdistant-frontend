@@ -246,7 +246,6 @@ export default {
 /* iPhone 5/SE */
 @media screen and (max-width: 320px) {
   .nav {
-    height: 30px;
     padding: 0px 15px;
     .label {
       p {

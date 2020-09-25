@@ -43,6 +43,7 @@
 
 .modal-container {
   width: 300px;
+  box-sizing: border-box;
   margin: 0px auto;
   padding: 20px 15px;
   background-color: #fff;

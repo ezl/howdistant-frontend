@@ -27,14 +27,17 @@
 
     <div class="actions">
       <primary-button
+        style="margin-bottom: 15px;"
         @click="shareSurvey"
         :label="hasShare ? 'Share to compare' : 'Copy link to share'"
       />
-      <div class="copy-link" v-show="hasShare">
+      <div class="copy-link" v-show="hasShare" style="margin-bottom: 15px;">
         <a href="#" @click="toggleCopyLinkModal">Copy Link</a>
       </div>
+      <secondary-button @click="toggleNotificationModal" label="Get Notified" />
     </div>
 
+    <!-- START Copy Link Modal -->
     <modal
       class="copy-link-modal"
       v-if="showCopyLinkModal"
@@ -58,19 +61,59 @@
         </div>
       </div>
     </modal>
+    <!-- END Copy Link Modal -->
+
+    <!-- START Notification Modal -->
+    <modal
+      class="notification-modal"
+      v-if="showNotificationModal"
+      @close="toggleNotificationModal"
+    >
+      <div slot="body">
+        <h4>Get notified when friends and families answer</h4>
+        <p>
+          Enter your phone number below, and we will text you when new results
+          are added to your comparison page.
+        </p>
+        <div class="link">
+          <input
+            placeholder="(123) 456-7890"
+            ref="phone"
+            v-model="phone"
+            v-cleave="{
+              numericOnly: true,
+              blocks: [0, 3, 0, 3, 4],
+              delimiters: ['(', ')', ' ', '-']
+            }"
+          />
+        </div>
+      </div>
+      <div slot="footer">
+        <primary-button
+          label="Submit"
+          @click="enableSMSNotification"
+          :disabled="!phone"
+        />
+      </div>
+    </modal>
+    <!-- END Notification Modal -->
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       showCopyLinkModal: false,
-      copied: false
+      showNotificationModal: false,
+      copied: false,
+      phone: ""
     };
   },
   computed: {
     bundleLink() {
-      return `${location.origin}/${this.$parent.bundle.id}/`;
+      return `${location.origin}/${this.$parent.bundle.id}`;
     },
     hasShare() {
       if (navigator && navigator.share) {
@@ -80,6 +123,37 @@ export default {
     }
   },
   methods: {
+    async enableSMSNotification() {
+      const id = this.$parent.bundle.submitted_survey.id;
+      const { phone } = this;
+
+      try {
+        await axios.put(
+          `${process.env.VUE_APP_BACKEND_URI}/api/v1/surveys/${id}/enable_sms_notification/`,
+          {
+            phone
+          }
+        );
+        this.toggleNotificationModal();
+        this.$toasted.show("🔔 Notifications Turned On!", {
+          className: "enabled_sms_toast",
+          position: "top-center",
+          fullWidth: true,
+          action: [
+            {
+              text: "",
+              class: "close_toast_action",
+              onClick: (e, toastObject) => {
+                toastObject.goAway(0);
+              }
+            }
+          ],
+          duration: 5000
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     shareSurvey() {
       if (this.hasShare) {
         navigator.share({
@@ -89,6 +163,9 @@ export default {
       } else {
         this.toggleCopyLinkModal();
       }
+    },
+    toggleNotificationModal() {
+      this.showNotificationModal = !this.showNotificationModal;
     },
     toggleCopyLinkModal() {
       this.showCopyLinkModal = !this.showCopyLinkModal;
@@ -160,7 +237,8 @@ export default {
     }
   }
 }
-.copy-link-modal {
+.copy-link-modal,
+.notification-modal {
   h4 {
     font-style: normal;
     font-weight: normal;
@@ -226,10 +304,42 @@ export default {
   }
 }
 
+.notification-modal {
+  h4 {
+    margin-bottom: 0px;
+  }
+  .link {
+    input {
+      width: 100%;
+      border-radius: 8px;
+      background: none;
+      background-color: #f0f2f5;
+      padding-left: 15px;
+    }
+  }
+}
+
 /* iPhone 5/SE */
 @media (max-width: 320px) {
   .actions {
     margin-top: 20px;
+  }
+}
+</style>
+<style lang="scss">
+.toasted-container {
+  .enabled_sms_toast {
+    background-color: #2671d9;
+    font-family: Arial;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    padding-left: calc(100vw / 4);
+  }
+
+  a.close_toast_action {
+    background: url("../../assets/images/toast-close.svg") no-repeat scroll;
   }
 }
 </style>
