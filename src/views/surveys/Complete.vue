@@ -316,6 +316,7 @@ export default {
       background: none;
       background-color: #f0f2f5;
       padding-left: 15px;
+      font-size: 18px;
     }
   }
 }
