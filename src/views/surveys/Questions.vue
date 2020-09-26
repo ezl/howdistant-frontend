@@ -335,6 +335,7 @@ export default {
 
     .option {
       height: calc(100vw / 7);
+      max-height: 60px;
       padding: 5px 0px;
       display: flex;
       align-items: center;

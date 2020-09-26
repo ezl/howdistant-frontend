@@ -78,6 +78,7 @@
         <div class="link">
           <input
             placeholder="(123) 456-7890"
+            type="tel"
             ref="phone"
             v-model="phone"
             v-cleave="{
@@ -220,7 +221,7 @@ export default {
   }
 }
 .actions {
-  margin-top: 20vh;
+  margin-top: 50px;
 
   .copy-link {
     margin-top: 30px;
