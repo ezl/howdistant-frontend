@@ -162,7 +162,9 @@ export default {
             title: "How Distant?",
             url: this.bundleLink
           });
-          this.toggleNotificationModal();
+          setTimeout(() => {
+            this.toggleNotificationModal();
+          }, 1000);
         } catch (err) {
           console.log(err);
         }
