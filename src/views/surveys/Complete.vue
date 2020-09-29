@@ -155,12 +155,17 @@ export default {
         console.log(err);
       }
     },
-    shareSurvey() {
+    async shareSurvey() {
       if (this.hasShare) {
-        navigator.share({
-          title: "How Distant?",
-          url: this.bundleLink
-        });
+        try {
+          await navigator.share({
+            title: "How Distant?",
+            url: this.bundleLink
+          });
+          this.toggleNotificationModal();
+        } catch (err) {
+          console.log(err);
+        }
       } else {
         this.toggleCopyLinkModal();
       }

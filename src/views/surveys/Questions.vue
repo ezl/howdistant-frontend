@@ -162,7 +162,7 @@ export default {
 
       return this.currentQuestion.type === "radio"
         ? !!this.currentAnswer
-        : !!this.currentAnswer.length;
+        : !!(this.currentAnswer || []).length;
     }
   },
   mounted() {
