@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar />
+    <nav-bar v-if="currentRouteName !== 'complete'" />
     <div class="container">
       <router-view :key="$route.hash" />
     </div>
@@ -20,6 +20,11 @@ export default {
       bundleId: null,
       invited: false
     };
+  },
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(async vm => {

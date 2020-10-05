@@ -192,9 +192,12 @@ export default {
   margin-bottom: 40px;
 }
 .logo {
+  margin-top: 10px;
   img {
     margin: auto;
     display: block;
+    height: 90px;
+    width: 90px;
   }
 }
 .subheader {
@@ -203,6 +206,7 @@ export default {
     font-weight: normal;
     font-size: 24px;
     line-height: 30px;
+    margin-top: 20px;
 
     color: #27272e;
   }

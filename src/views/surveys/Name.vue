@@ -31,7 +31,10 @@
     <modal class="info-modal" v-if="showInfoModal" @close="toggleInfoModal">
       <div slot="header"></div>
       <div slot="body">
-        <h4>{{ $parent.bundle.surveys[0].name }} wants to hang</h4>
+        <h4>
+          {{ bundleNames }} want{{ surveyCount > 1 ? "" : "s" }}
+          to hang
+        </h4>
 
         <p>
           Answer 8 quick questions and we’ll compare your answers to make
@@ -49,6 +52,41 @@ export default {
     return {
       showInfoModal: false
     };
+  },
+  computed: {
+    surveyCount() {
+      if (this.$parent.bundle && this.$parent.bundle.surveys) {
+        return this.$parent.bundle.surveys.length;
+      }
+      return 0;
+    },
+    bundleNames() {
+      if (this.$parent.bundle) {
+        if (this.$parent.bundle.surveys.length > 5) {
+          return `${this.$parent.bundle.surveys
+            .map(s => s.name)
+            .slice(0, 5)
+            .join(", ")} and ${this.$parent.bundle.surveys.length - 5} other${
+            this.$parent.bundle.surveys.length - 5 > 1 ? "s" : ""
+          }`;
+        } else if (this.$parent.bundle.surveys.length > 2) {
+          return `${this.$parent.bundle.surveys
+            .map(s => s.name)
+            .slice(0, this.$parent.bundle.surveys.length - 1)
+            .join(", ")} and ${
+            this.$parent.bundle.surveys[this.$parent.bundle.surveys.length - 1]
+              .name
+          }`;
+        } else if (this.$parent.bundle.surveys.length > 1) {
+          return `${this.$parent.bundle.surveys
+            .map(s => s.name)
+            .join(" and ")}`;
+        } else {
+          return this.$parent.bundle.surveys[0].name;
+        }
+      }
+      return "";
+    }
   },
   methods: {
     goToQuestions() {
