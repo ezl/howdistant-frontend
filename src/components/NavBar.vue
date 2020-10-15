@@ -1,5 +1,6 @@
 <template>
   <div class="nav">
+    <!-- START Side Menu -->
     <side-menu
       :showMenu="showSideMenu"
       @close="toggleSideMenu"
@@ -55,6 +56,8 @@
         </div>
       </div>
     </side-menu>
+    <!-- END Side Menu -->
+
     <template v-if="showBackButton">
       <div class="back" @click="goBack">
         <img src="@/assets/images/back.svg" />
@@ -83,43 +86,6 @@
         ></div>
       </div>
     </div>
-    <template v-if="showGroupButton">
-      <div class="group" @click="toggleGroupModal">
-        <img src="@/assets/images/group.svg" />
-        <span
-          >{{ $parent.bundle ? $parent.bundle.surveys.length : 0 }} answ.</span
-        >
-      </div>
-    </template>
-
-    <modal class="group-modal" v-if="showGroupModal" @close="toggleGroupModal">
-      <div slot="header" style="width: 100%; display: inline-block">
-        <h4 style="margin:0px; display: inline-block;">Responses</h4>
-        <div
-          class="modal-default-button"
-          @click="toggleGroupModal"
-          style="float:right;"
-        >
-          <img src="@/assets/images/close.svg" alt="" />
-        </div>
-      </div>
-      <div slot="body">
-        <div class="responses">
-          <div
-            class="response"
-            v-for="(survey, idx) in $parent.bundle.surveys"
-            :key="idx"
-          >
-            <div class="name">
-              <p>{{ survey.name }}</p>
-            </div>
-            <div class="created">
-              <p>{{ survey.created | date }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </modal>
 
     <CopyLinkModal
       v-if="$parent.bundle"
@@ -152,7 +118,6 @@ export default {
   },
   data() {
     return {
-      showGroupModal: false,
       showSideMenu: false,
       showCopyLinkModal: false,
       showNotificationModal: false
@@ -185,12 +150,6 @@ export default {
     },
     showExportButton() {
       if (this.$route.meta.showExportButton) {
-        return true;
-      }
-      return false;
-    },
-    showGroupButton() {
-      if (this.$route.meta.showGroupButton) {
         return true;
       }
       return false;
@@ -240,17 +199,6 @@ export default {
     },
     close() {
       this.$router.push({ name: "landing" });
-    },
-    shareAnswers() {
-      if (navigator.share) {
-        navigator.share({
-          title: "How Distant?",
-          url: `${location.origin}/${this.$parent.bundle.id}/`
-        });
-      }
-    },
-    toggleGroupModal() {
-      this.showGroupModal = !this.showGroupModal;
     },
     toggleSideMenu() {
       this.showSideMenu = !this.showSideMenu;

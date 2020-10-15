@@ -76,8 +76,7 @@ const routes = [
           label: () => "Here’s how your group responded",
           showBackButton: false,
           showCloseButton: false,
-          showExportButton: true,
-          showGroupButton: true
+          showExportButton: true
         }
       }
     ]
