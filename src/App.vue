@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-const ROOT_PATH = "https://nervous-hamilton-b8033b.netlify.app";
+const ROOT_PATH = "https://www.howdistant.com";
 export default {
   property: "App",
   data() {
