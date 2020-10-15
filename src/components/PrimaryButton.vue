@@ -1,6 +1,10 @@
 <template>
   <button :class="{ disabled: disabled }" @click="$emit('click')">
-    {{ label }}
+    <div style="display: flex;align-items: center;justify-content: center;">
+      <span>{{ label }}</span>
+      <img v-if="loading" src="@/assets/images/loading.svg" />
+      <img class="success" v-if="success" src="@/assets/images/success.svg" />
+    </div>
   </button>
 </template>
 <script>
@@ -11,6 +15,14 @@ export default {
       required: true
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    success: {
       type: Boolean,
       default: false
     }
@@ -41,5 +53,13 @@ button {
 .disabled {
   background: rgba(38, 113, 217, 0.6);
   pointer-events: none;
+}
+img {
+  height: 20px;
+  margin-left: 8px;
+}
+.success {
+  height: 20px;
+  color: white;
 }
 </style>

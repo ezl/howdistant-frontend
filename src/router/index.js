@@ -6,6 +6,7 @@ import Survey from "@/views/surveys/Survey.vue";
 import Name from "@/views/surveys/Name.vue";
 import Questions from "@/views/surveys/Questions.vue";
 import Complete from "@/views/surveys/Complete.vue";
+import InviteSent from "@/views/surveys/InviteSent.vue";
 import Summary from "@/views/surveys/Summary.vue";
 
 Vue.use(VueRouter);
@@ -53,6 +54,15 @@ const routes = [
         name: "complete",
         path: "complete",
         component: Complete,
+        meta: {
+          label: () => "",
+          showBackButton: false
+        }
+      },
+      {
+        name: "invite_sent",
+        path: "invite_sent",
+        component: InviteSent,
         meta: {
           label: () => "",
           showBackButton: false

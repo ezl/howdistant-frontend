@@ -1,5 +1,60 @@
 <template>
   <div class="nav">
+    <side-menu
+      :showMenu="showSideMenu"
+      @close="toggleSideMenu"
+      class="side-menu"
+    >
+      <div slot="header" class="header">
+        <div class="close">
+          <img src="@/assets/images/close.svg" @click="toggleSideMenu" />
+        </div>
+        <div class="header-content">
+          <h4>Menu</h4>
+        </div>
+      </div>
+      <div slot="menu-items" class="menu-items">
+        <div class="menu-item">
+          <div class="icon">📤</div>
+          <div class="menu-label"><p>Invite someone to the group</p></div>
+        </div>
+        <div class="line"></div>
+        <div class="menu-item">
+          <div class="icon">🔔</div>
+          <div class="menu-label">
+            <p>Get notified when new results added</p>
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="menu-item">
+          <div class="icon">📝</div>
+          <div class="menu-label">
+            <p>Start a new survey with another group</p>
+          </div>
+        </div>
+        <div class="line"></div>
+
+        <div class="menu-item">
+          <div class="icon">😊</div>
+          <div class="menu-label">
+            <p>
+              Your Group ({{
+                $parent.bundle ? $parent.bundle.surveys.length : 0
+              }}
+              responses)
+            </p>
+          </div>
+        </div>
+        <div class="menu-item survey-names">
+          <div class="icon"></div>
+          <div class="menu-label">
+            <p v-for="(survey, idx) in $parent.bundle.surveys" :key="idx">
+              {{ survey.name }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </side-menu>
     <template v-if="showBackButton">
       <div class="back" @click="goBack">
         <img src="@/assets/images/back.svg" />
@@ -11,8 +66,8 @@
       </div>
     </template>
     <template v-if="showExportButton">
-      <div class="back" @click="shareAnswers">
-        <img src="@/assets/images/export.svg" />
+      <div class="back" @click="toggleSideMenu">
+        <img src="@/assets/images/hamburger.svg" />
       </div>
     </template>
     <div class="label">
@@ -71,7 +126,8 @@
 export default {
   data() {
     return {
-      showGroupModal: false
+      showGroupModal: false,
+      showSideMenu: false
     };
   },
   computed: {
@@ -129,6 +185,9 @@ export default {
     },
     toggleGroupModal() {
       this.showGroupModal = !this.showGroupModal;
+    },
+    toggleSideMenu() {
+      this.showSideMenu = !this.showSideMenu;
     }
   }
 };
@@ -240,6 +299,61 @@ export default {
       background: #f6f6f6;
       border-radius: 5px;
     }
+  }
+}
+
+.side-menu {
+  .header {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+
+    .close {
+      flex: 1;
+      display: flex;
+    }
+    .header-content {
+      flex: 5;
+      h4 {
+        margin: 0px;
+        padding-right: 15px;
+      }
+    }
+  }
+  .menu-items {
+    padding: 10px;
+
+    .menu-item {
+      display: flex;
+      flex-direction: row;
+      height: 50px;
+      margin: 5px 0px;
+
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+      }
+      .menu-label {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        p {
+          margin: 0px;
+          font-size: 14px;
+          line-height: 17px;
+        }
+      }
+    }
+    .survey-names {
+      margin-top: 0px;
+      margin-left: 50px;
+      height: 100%;
+    }
+  }
+  .line {
+    border-top: 1px solid rgba(66, 135, 224, 0.4);
   }
 }
 

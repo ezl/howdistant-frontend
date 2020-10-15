@@ -16,98 +16,37 @@
         your reunion safe and comfortable for everyone.
       </p>
       <p>
-        Save the results page, and it will update as friends and family members
-        answer the questions.
+        Want to add more people later on? Access the menu on the results page to
+        send out additional invites.
       </p>
-
-      <router-link :to="{ name: 'summary', params: { id: $parent.bundle.id } }"
-        >View Results</router-link
-      >
     </div>
 
     <div class="actions">
       <primary-button
         style="margin-bottom: 15px;"
         @click="shareSurvey"
-        :label="hasShare ? 'Share to compare' : 'Copy link to share'"
+        label="Invite Others to take the Quiz"
       />
-      <div class="copy-link" v-show="hasShare" style="margin-bottom: 15px;">
-        <a href="#" @click="toggleCopyLinkModal">Copy Link</a>
-      </div>
-      <secondary-button @click="toggleNotificationModal" label="Get Notified" />
+      <router-link :to="{ name: 'invite_sent' }">Skip</router-link>
     </div>
 
-    <!-- START Copy Link Modal -->
-    <modal
-      class="copy-link-modal"
-      v-if="showCopyLinkModal"
+    <CopyLinkModal
+      :show="showCopyLinkModal"
+      :bundleId="$parent.bundle.id"
       @close="toggleCopyLinkModal"
-    >
-      <div slot="body">
-        <h4>Copy the URL</h4>
-        <p>
-          Send this link to friends and family to invite them to share answers
-          so that everyone is comfortable.
-        </p>
-        <div class="link">
-          <input type="text" :value="bundleLink" ref="bundleLink" />
-          <div class="copy" @click="copyUrl">
-            <p>Copy</p>
-          </div>
-        </div>
-        <div class="copied" v-if="copied">
-          <img src="@/assets/images/thumbup.png" />
-          <p>link copied!</p>
-        </div>
-      </div>
-    </modal>
-    <!-- END Copy Link Modal -->
-
-    <!-- START Notification Modal -->
-    <modal
-      class="notification-modal"
-      v-if="showNotificationModal"
-      @close="toggleNotificationModal"
-    >
-      <div slot="body">
-        <h4>Get notified when friends and families answer</h4>
-        <p>
-          Enter your phone number below, and we will text you when new results
-          are added to your comparison page.
-        </p>
-        <div class="link">
-          <input
-            placeholder="(123) 456-7890"
-            type="tel"
-            ref="phone"
-            v-model="phone"
-            v-cleave="{
-              numericOnly: true,
-              blocks: [0, 3, 0, 3, 4],
-              delimiters: ['(', ')', ' ', '-']
-            }"
-          />
-        </div>
-      </div>
-      <div slot="footer">
-        <primary-button
-          label="Submit"
-          @click="enableSMSNotification"
-          :disabled="!phone"
-        />
-      </div>
-    </modal>
-    <!-- END Notification Modal -->
+    />
   </div>
 </template>
 <script>
-import axios from "axios";
+import CopyLinkModal from "@/components/CopyLinkModal.vue";
 
 export default {
+  components: {
+    CopyLinkModal
+  },
   data() {
     return {
       showCopyLinkModal: false,
-      showNotificationModal: false,
       copied: false,
       phone: ""
     };
@@ -124,37 +63,6 @@ export default {
     }
   },
   methods: {
-    async enableSMSNotification() {
-      const id = this.$parent.bundle.submitted_survey.id;
-      const { phone } = this;
-
-      try {
-        await axios.put(
-          `${process.env.VUE_APP_BACKEND_URI}/api/v1/surveys/${id}/enable_sms_notification/`,
-          {
-            phone
-          }
-        );
-        this.toggleNotificationModal();
-        this.$toasted.show("🔔 Notifications Turned On!", {
-          className: "enabled_sms_toast",
-          position: "top-center",
-          fullWidth: true,
-          action: [
-            {
-              text: "",
-              class: "close_toast_action",
-              onClick: (e, toastObject) => {
-                toastObject.goAway(0);
-              }
-            }
-          ],
-          duration: 5000
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    },
     async shareSurvey() {
       if (this.hasShare) {
         try {
@@ -172,17 +80,12 @@ export default {
         this.toggleCopyLinkModal();
       }
     },
-    toggleNotificationModal() {
-      this.showNotificationModal = !this.showNotificationModal;
-    },
     toggleCopyLinkModal() {
       this.showCopyLinkModal = !this.showCopyLinkModal;
-    },
-    copyUrl() {
-      let textToCopy = this.$refs.bundleLink;
-      textToCopy.select();
-      document.execCommand("copy");
-      this.copied = true;
+
+      if (!this.showCopyLinkModal) {
+        this.$router.push({ name: "invite_sent" });
+      }
     }
   }
 };
@@ -209,14 +112,15 @@ export default {
     margin-top: 20px;
 
     color: #27272e;
+    padding: 5px;
   }
 }
 .content {
   p {
     font-style: normal;
     font-weight: normal;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 17px;
 
     color: #000000;
     padding: 5px;
@@ -233,102 +137,16 @@ export default {
 }
 .actions {
   margin-top: 50px;
+  text-align: center;
 
-  .copy-link {
-    margin-top: 30px;
-    text-align: center;
-
-    a {
-      font-style: normal;
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 23px;
-      /* identical to box height */
-      text-decoration-line: underline;
-      color: #2671d9;
-    }
-  }
-}
-.copy-link-modal,
-.notification-modal {
-  h4 {
+  a {
     font-style: normal;
-    font-weight: normal;
-    font-size: 24px;
-    line-height: 30px;
-
-    color: #27272e;
-  }
-  p {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
-  }
-  .link {
-    display: flex;
-    flex-direction: row;
-    input {
-      border: none;
-      border-radius: 8px 0px 0px 8px;
-      height: 50px;
-      width: 250px;
-      box-sizing: border-box;
-      background: url("../../assets/images/link.svg") no-repeat scroll 10px 15px;
-      padding-left: 40px;
-      background-color: #f0f2f5;
-    }
-    .copy {
-      width: 60px;
-      height: 50px;
-      background: #2671d9;
-      border-radius: 0px 8px 8px 0px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      p {
-        font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 18px;
-        /* identical to box height */
-
-        color: #ffffff;
-      }
-    }
-  }
-  .copied {
-    display: flex;
-    margin-top: 10px;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-
-    img {
-      width: 16px;
-      height: 16px;
-    }
-    p {
-      color: #2671d9;
-      margin: 0px 5px;
-    }
-  }
-}
-
-.notification-modal {
-  h4 {
-    margin-bottom: 0px;
-  }
-  .link {
-    input {
-      width: 100%;
-      border-radius: 8px;
-      background: none;
-      background-color: #f0f2f5;
-      padding-left: 15px;
-      font-size: 18px;
-    }
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 23px;
+    /* identical to box height */
+    text-decoration-line: none;
+    color: #2671d9;
   }
 }
 
