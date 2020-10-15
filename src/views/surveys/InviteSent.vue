@@ -31,104 +31,34 @@
       >
     </div>
 
-    <!-- START Notification Modal -->
-    <modal
-      class="notification-modal"
-      v-if="showNotificationModal"
+    <NotificationModal
+      :show="showNotificationModal"
+      :surveyId="$parent.bundle.submitted_survey.id"
       @close="toggleNotificationModal"
-    >
-      <div slot="body">
-        <h4>Get notified when friends and families answer</h4>
-        <p>
-          Enter your phone number below, and we will text you when new results
-          are added to your comparison page.
-        </p>
-        <div class="link">
-          <input
-            placeholder="(123) 456-7890"
-            type="tel"
-            ref="phone"
-            v-model="phone"
-            v-cleave="{
-              numericOnly: true,
-              blocks: [0, 3, 0, 3, 4],
-              delimiters: ['(', ')', ' ', '-']
-            }"
-          />
-        </div>
-      </div>
-      <div slot="footer">
-        <primary-button
-          :label="notificationSuccess ? 'Success' : 'Submit'"
-          @click="enableSMSNotification"
-          :disabled="!phone || loading || notificationSuccess"
-          :loading="loading"
-          :success="notificationSuccess"
-        />
-      </div>
-      <!--
-      <template v-if="notificationSuccess">
-        <div slot="body">
-          <h4>Success!</h4>
-          <img src="@/assets/images/success.svg" />
-        </div>
-        <div slot="footer">
-          <primary-button label="View Results" @click="navigateToSummary" />
-        </div>
-      </template>
-      -->
-    </modal>
-    <!-- END Notification Modal -->
+      @success="navigateToSummary"
+    />
   </div>
 </template>
 <script>
-import axios from "axios";
-
+import NotificationModal from "@/components/NotificationModal.vue";
 export default {
+  components: {
+    NotificationModal
+  },
   data() {
     return {
-      showNotificationModal: false,
-      notificationSuccess: false,
-      phone: "",
-      loading: false
+      showNotificationModal: false
     };
-  },
-  computed: {
-    hasShare() {
-      if (navigator && navigator.share) {
-        return true;
-      }
-      return false;
-    }
   },
   methods: {
     navigateToSummary() {
-      this.toggleNotificationModal();
-      this.$router.push({
-        name: "summary",
-        params: { id: this.$parent.bundle.id }
-      });
-    },
-    async enableSMSNotification() {
-      const id = this.$parent.bundle.submitted_survey.id;
-      const { phone } = this;
-
-      try {
-        this.loading = true;
-        await axios.put(
-          `${process.env.VUE_APP_BACKEND_URI}/api/v1/surveys/${id}/enable_sms_notification/`,
-          {
-            phone
-          }
-        );
-        this.loading = false;
-        this.notificationSuccess = true;
-        setTimeout(() => {
-          this.navigateToSummary();
-        }, 1000);
-      } catch (err) {
-        console.log(err);
-      }
+      setTimeout(() => {
+        this.toggleNotificationModal();
+        this.$router.push({
+          name: "summary",
+          params: { id: this.$parent.bundle.id }
+        });
+      }, 1000);
     },
     toggleNotificationModal() {
       this.showNotificationModal = !this.showNotificationModal;
@@ -282,23 +212,6 @@ export default {
 @media (max-width: 320px) {
   .actions {
     margin-top: 20px;
-  }
-}
-</style>
-<style lang="scss">
-.toasted-container.top-center.full-width {
-  .enabled_sms_toast {
-    background-color: #2671d9;
-    font-family: Arial;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 17px;
-    padding-left: calc(100vw / 4);
-  }
-
-  a.close_toast_action {
-    background: url("../../assets/images/toast-close.svg") no-repeat scroll;
   }
 }
 </style>

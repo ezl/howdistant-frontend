@@ -14,19 +14,19 @@
         </div>
       </div>
       <div slot="menu-items" class="menu-items">
-        <div class="menu-item">
+        <div class="menu-item" @click="shareSurvey">
           <div class="icon">📤</div>
           <div class="menu-label"><p>Invite someone to the group</p></div>
         </div>
         <div class="line"></div>
-        <div class="menu-item">
+        <div class="menu-item" @click="toggleNotificationModal">
           <div class="icon">🔔</div>
           <div class="menu-label">
             <p>Get notified when new results added</p>
           </div>
         </div>
         <div class="line"></div>
-        <div class="menu-item">
+        <div class="menu-item" @click="startNewSurvey">
           <div class="icon">📝</div>
           <div class="menu-label">
             <p>Start a new survey with another group</p>
@@ -47,7 +47,7 @@
         </div>
         <div class="menu-item survey-names">
           <div class="icon"></div>
-          <div class="menu-label">
+          <div class="menu-label" v-if="$parent.bundle">
             <p v-for="(survey, idx) in $parent.bundle.surveys" :key="idx">
               {{ survey.name }}
             </p>
@@ -120,14 +120,42 @@
         </div>
       </div>
     </modal>
+
+    <CopyLinkModal
+      v-if="$parent.bundle"
+      :show="showCopyLinkModal"
+      :bundleId="$parent.bundle.id"
+      @close="toggleCopyLinkModal"
+    />
+
+    <NotificationModal
+      v-if="$parent.bundle"
+      :show="showNotificationModal"
+      :surveyId="
+        $parent.bundle.submitted_survey
+          ? $parent.bundle.submitted_survey.id
+          : $parent.bundle.surveys[0].id
+      "
+      @close="toggleNotificationModal"
+      @success="notificationUpdateSuccess"
+    />
   </div>
 </template>
 <script>
+import CopyLinkModal from "@/components/CopyLinkModal.vue";
+import NotificationModal from "@/components/NotificationModal.vue";
+
 export default {
+  components: {
+    CopyLinkModal,
+    NotificationModal
+  },
   data() {
     return {
       showGroupModal: false,
-      showSideMenu: false
+      showSideMenu: false,
+      showCopyLinkModal: false,
+      showNotificationModal: false
     };
   },
   computed: {
@@ -166,9 +194,47 @@ export default {
         return true;
       }
       return false;
+    },
+    bundleLink() {
+      return `${location.origin}/${this.$parent.bundle.id}`;
+    },
+    hasShare() {
+      if (navigator && navigator.share) {
+        return true;
+      }
+      return false;
     }
   },
   methods: {
+    startNewSurvey() {
+      this.toggleSideMenu();
+      this.$router.push({ name: "name" });
+    },
+    toggleNotificationModal() {
+      this.showNotificationModal = !this.showNotificationModal;
+    },
+    notificationUpdateSuccess() {
+      setTimeout(() => {
+        this.toggleNotificationModal();
+      }, 1000);
+    },
+    async shareSurvey() {
+      if (this.hasShare) {
+        try {
+          await navigator.share({
+            title: "How Distant?",
+            url: this.bundleLink
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        this.toggleCopyLinkModal();
+      }
+    },
+    toggleCopyLinkModal() {
+      this.showCopyLinkModal = !this.showCopyLinkModal;
+    },
     goBack() {
       this.$router.back();
     },

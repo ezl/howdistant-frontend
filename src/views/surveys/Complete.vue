@@ -46,9 +46,7 @@ export default {
   },
   data() {
     return {
-      showCopyLinkModal: false,
-      copied: false,
-      phone: ""
+      showCopyLinkModal: false
     };
   },
   computed: {
