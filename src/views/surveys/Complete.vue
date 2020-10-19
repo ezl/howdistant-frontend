@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     bundleLink() {
-      return `${location.origin}/survey/invited?id=${this.$parent.bundle.id}`;
+      return `${location.origin}/survey/invited/?id=${this.$parent.bundle.id}`;
     },
     hasShare() {
       if (navigator && navigator.share) {
