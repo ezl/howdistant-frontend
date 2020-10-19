@@ -37,8 +37,8 @@ export default {
     });
   },
   async mounted() {
-    if (this.$route.params.id) {
-      this.bundleId = this.$route.params.id;
+    if (this.$route.query.id) {
+      this.bundleId = this.$route.query.id;
       this.invited = true;
 
       const response = await axios.get(

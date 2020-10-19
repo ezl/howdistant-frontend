@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     bundleLink() {
-      return `${location.origin}/${this.bundleId}`;
+      return `${location.origin}/survey/invited?id=${this.bundleId}`;
     }
   },
   methods: {

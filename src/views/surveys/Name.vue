@@ -50,9 +50,41 @@
 export default {
   data() {
     return {
-      showInfoModal: false
+      showInfoModal: false,
+      ogImage:
+        this.$const.rootPath + require("../../assets/images/howdistant_og2.jpg")
     };
   },
+  metaInfo() {
+    return {
+      title: "How Distant",
+      meta: [
+        {
+          vmid: "og:title",
+          property: "og:title",
+          content:
+            "Let Jack, Sue, and LeAnn know your social distancing preferences."
+        },
+        {
+          vmid: "og:url",
+          property: "og:url",
+          content: "https://www.howdistant.com/survey/invited/"
+        },
+        {
+          vmid: "og:description",
+          property: "og:description",
+          content:
+            "Answer a few questions and compare answers to remove the awkwardness when you meet in person."
+        },
+        {
+          vmid: "og:image",
+          property: "og:image",
+          content: this.ogImage
+        }
+      ]
+    };
+  },
+
   computed: {
     surveyCount() {
       if (this.$parent.bundle && this.$parent.bundle.surveys) {
@@ -98,7 +130,7 @@ export default {
   },
   mounted() {
     this.$refs.nameInput.focus();
-    if (this.$route.params.id) {
+    if (this.$route.query.id) {
       this.toggleInfoModal();
     }
   }

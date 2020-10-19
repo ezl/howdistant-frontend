@@ -42,6 +42,10 @@ Vue.filter("date", value => {
   return moment(value).fromNow();
 });
 
+Vue.prototype.$const = {
+  rootPath: process.env.VUE_APP_ROOT_PATH
+};
+
 new Vue({
   router,
   store,

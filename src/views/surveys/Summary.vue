@@ -83,14 +83,45 @@ export default {
     return {
       surveyForm: null,
       currentTab: "interaction",
-      showInfoModal: false
+      showInfoModal: false,
+      ogImage:
+        this.$const.rootPath + require("../../assets/images/howdistant_og3.jpg")
+    };
+  },
+  metaInfo() {
+    return {
+      title: "How Distant",
+      meta: [
+        {
+          vmid: "og:title",
+          property: "og:title",
+          content:
+            "View updated social distancing preferences for Joe, Barbara, Vict..."
+        },
+        {
+          vmid: "og:url",
+          property: "og:url",
+          content: "https://www.howdistant.com/survey/summary/"
+        },
+        {
+          vmid: "og:description",
+          property: "og:description",
+          content:
+            "Review everyone's preferences so you know everyone's comfort level with activities and greetings before you meet."
+        },
+        {
+          vmid: "og:image",
+          property: "og:image",
+          content: this.ogImage
+        }
+      ]
     };
   },
   async beforeRouteEnter(to, from, next) {
     await next(async vm => {
       if (!vm.$parent.bundle || !vm.$parent.bundle.summary) {
         const response = await axios.get(
-          `${process.env.VUE_APP_BACKEND_URI}/api/v1/survey_bundles/${vm.$route.params.id}`
+          `${process.env.VUE_APP_BACKEND_URI}/api/v1/survey_bundles/${vm.$route.query.id}`
         );
         vm.$parent.bundle = response.data;
         vm.surveyForm = vm.$parent.bundle.summary;
@@ -128,17 +159,6 @@ export default {
   mounted() {
     this.toggleInfoModal();
   },
-  /*
-  async mounted() {
-    if (!this.$parent.bundle || !this.$parent.bundle.summary) {
-      const response = await axios.get(
-        `http://localhost:8000/api/v1/survey_bundles/${this.$route.params.id}`
-      );
-      this.$parent.bundle = response.data;
-      this.surveyForm = this.$parent.bundle.summary;
-    }
-  },
-  */
   methods: {
     toggleInfoModal() {
       this.showInfoModal = !this.showInfoModal;

@@ -4,77 +4,71 @@
   </div>
 </template>
 <script>
-const ROOT_PATH = "https://www.howdistant.com";
 export default {
   property: "App",
   data() {
     return {
-      ogImage: ROOT_PATH + require("./assets/images/howdistant_og.jpg"),
-      twitterImage:
-        ROOT_PATH + require("./assets/images/howdistant_twitter.jpg")
+      ogImage:
+        this.$const.rootPath + require("./assets/images/howdistant_og.jpg")
     };
   },
   metaInfo() {
     return {
       title: "How Distant",
       meta: [
-        // Facebook OpenGraph
         {
+          vmid: "og:site_name",
           property: "og:site_name",
           content: "How Distant"
         },
         {
+          vmid: "og:type",
           property: "og:type",
           content: "website"
         },
         {
+          vmid: "og:title",
           property: "og:title",
           content:
             "How Distant allows you to avoid awkward reunions with 8 questions"
         },
         {
+          vmid: "og:description",
           property: "og:description",
           content:
             "Compare socializing preferences with friends and family to ensure a comfortable time for everyone. Make get togethers safe and easy in just a few short minutes."
         },
         {
+          vmid: "og:url",
           property: "og:url",
           content: "https://www.howdistant.com"
         },
         {
+          vmid: "og:image",
           property: "og:image",
           content: this.ogImage
         },
         {
+          vmid: "og:image:type",
           property: "og:image:type",
           content: "image/jpeg"
         },
         {
+          vmid: "og:image:width",
           property: "og:image:width",
           content: "1200"
         },
         {
+          vmid: "og:image:height",
           property: "og:image:height",
           content: "630"
         },
         {
+          vmid: "og:image:alt",
           property: "og:image:alt",
           content:
             "How Distant allows you to avoid awkward reunions with 8 questions"
-        },
-        // Twitter Card
-        { property: "twitter:card", content: "summary_large_image" },
-        {
-          property: "twitter:title",
-          content:
-            "Let Jack, Sue, and LeAnn know your social distancing preferences."
-        },
-        {
-          property: "twitter:description",
-          content:
-            "Answer a few questions and compare answers to remove the awkwardness when you meet in person."
-        },
-        { property: "twitter:image", content: this.twitterImage }
+        }
       ]
     };
   }

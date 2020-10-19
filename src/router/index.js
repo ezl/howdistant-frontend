@@ -31,7 +31,7 @@ const routes = [
         }
       },
       {
-        path: "/:id",
+        path: "invited",
         name: "invited",
         component: Name,
         meta: {
@@ -70,7 +70,7 @@ const routes = [
       },
       {
         name: "summary",
-        path: ":id/summary",
+        path: "summary",
         component: Summary,
         meta: {
           label: () => "Here’s how your group responded",
